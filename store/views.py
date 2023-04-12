@@ -21,3 +21,7 @@ def product_detail(request, slug):
     context = {'product': product}
 
     return render(request, 'store/products/detail.html', context)
+
+
+def category_list(request, category_slug):
+    pass 
