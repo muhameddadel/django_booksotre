@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 
+class ProductManger(models.Manager):
+    def get_queryset(self):
+        return super(ProductManger, self).get_queryset().filter(is_active=True)
+
+
 class Category(models.Model):
     name = models.CharField(max_length=150, db_index=True)
     slug = models.SlugField(max_length=150, unique=True)
@@ -24,9 +29,11 @@ class Product(models.Model):
     slug = models.SlugField(max_length=150)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     in_stock = models.BooleanField(default=True)
-    in_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+    products = ProductManger()
 
     class Meta:
         verbose_name_plural = 'Products'

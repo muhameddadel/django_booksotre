@@ -3,7 +3,7 @@ from .models import *
 
 
 def all_products(request):
-    products = Product.objects.all()
+    products = Product.products.all()
 
     context = {'products': products}
 
