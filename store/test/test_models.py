@@ -1,5 +1,6 @@
-from django.test import TestCase
 from django.contrib.auth.models import User
+from django.test import TestCase
+
 from store.models import *
 
 
@@ -36,3 +37,4 @@ class TestProductsModel(TestCase):
         data = self.data1
         self.assertTrue(isinstance(data, Product))
         self.assertEqual(str(data), 'django beginners')
+        
