@@ -42,16 +42,22 @@ class TestViewResponses(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_homepage_html(self):
+        """
+        Example: code valdiation
+        """
         request = HttpRequest()
         response = all_products(request)
         html = response.content.decode('utf8')
-        self.assertIn('<title>Home</title>', html)
+        self.assertIn('<title>BookStore</title>', html)
         self.assertEqual(response.status_code, 200)
 
     def test_view_function(self):
-        request = self.factory.get('/item/django-beginners')
+        """
+        Example: Using request factory
+        """
+        request = self.factory.get('/django-beginners')
         response = all_products(request)
         html = response.content.decode('utf8')
-        self.assertIn('<title>Home</title>', html)
+        self.assertIn('<title>BookStore</title>', html)
         self.assertEqual(response.status_code, 200)
         
