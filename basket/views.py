@@ -5,7 +5,9 @@ from store.models import *
 from .basket import Basket
 
 def basket_summary(request):
-    return render(request, 'store/basket/summary.html')
+    basket = Basket(request)
+    context = {'basket': basket}
+    return render(request, 'store/basket/summary.html', context)
 
 
 def basket_add(request):
