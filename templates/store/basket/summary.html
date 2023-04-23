@@ -62,13 +62,13 @@
 </main>
 
 <script>
-  $(document).on('click', '#delete-button', function(e){
+  $(document).on('click', '.delete-button', function(e){
       e.preventDefault();
       $.ajax({
           type: 'POST',
           url: '{% url "basket:basket-delete" %}',
           data: {
-              productid: $('#add-button').val(),
+              productid: $(this).data('index'),
               csrfmiddlewaretoken: '{{csrf_token}}',
               action: 'post',
           },

@@ -58,7 +58,7 @@ class Basket():
 
         if product_id in self.basket:
             del self.basket[product_id]
-            self.session.modified = True
+            self.save()
 
     def save(self):
         self.session.modified = True
