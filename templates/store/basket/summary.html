@@ -75,7 +75,9 @@
               action: 'post',
           },
           success: function(json) {
-            $('.product-item[data-index="'+ prodid +'"]').remove()
+            $('.product-item[data-index="'+ prodid +'"]').remove();
+            $('#basket-qty').text(json.qty);
+            $('#subtotal').text(json.subtotal);
           },
           error: function(xhr, errmsg, err) {
               
