@@ -37,8 +37,20 @@ def basket_update(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('productid'))
-        product_qty = int(request.POST.get('productqty'))
-        basket.update(product=product_id, qty=product_qty)
-
-        response = JsonResponse({'Sucess': True})
+        product_qty_str = request.POST.get('productqty')
+        try:
+            product_qty = int(product_qty_str)
+        except ValueError:
+            # handle the case where productqty cannot be converted to an int
+            response = JsonResponse({'success': False, 'error': 'Invalid quantity'})
+            response.status_code = 400 # Bad Request
+            return response
+        else:
+            basket.update(product=product_id, qty=product_qty)
+            response = JsonResponse({'success': True})
+            return response
+    else:
+        # handle the case where the request method is not POST or action is not 'post'
+        response = JsonResponse({'success': False, 'error': 'Invalid request'})
+        response.status_code = 400 # Bad Request
         return response
