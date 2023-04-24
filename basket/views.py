@@ -33,6 +33,7 @@ def basket_delete(request):
         return response
     
 
+
 def basket_update(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
@@ -47,7 +48,9 @@ def basket_update(request):
             return response
         else:
             basket.update(product=product_id, qty=product_qty)
-            response = JsonResponse({'success': True})
+            basketqty = basket.__len__()
+            baskettotal = basket.get_total_price()
+            response = JsonResponse({'qty': basketqty, 'subtotal': baskettotal})
             return response
     else:
         # handle the case where the request method is not POST or action is not 'post'
