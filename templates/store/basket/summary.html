@@ -23,7 +23,7 @@
           <div class="col border-bottom">
             <div class="row p-3">
               <div class="col-6">Hardback Book</div>
-              <div class="col-6 text-end"><span class="h6 fw-bold">£{{ product.price }}</span></div>
+              <div class="col-6 text-end"><span class="h6 fw-bold">£{{ item.total_price }}</span></div>
             </div>
           </div>
           <div class="col">
@@ -62,6 +62,7 @@
 </main>
 
 <script>
+  //delete item
   $(document).on('click', '.delete-button', function(e){
       e.preventDefault();
       var prodid = $(this).data('index')
@@ -75,6 +76,28 @@
           },
           success: function(json) {
             $('.product-item[data-index="'+ prodid +'"]').remove()
+          },
+          error: function(xhr, errmsg, err) {
+              
+          }
+      })
+  })
+
+  //update item
+  $(document).on('click', '.update-button', function(e){
+      e.preventDefault();
+      var prodid = $(this).data('index')
+      $.ajax({
+          type: 'POST',
+          url: '{% url "basket:basket-update" %}',
+          data: {
+              productid: $(this).data('index'),
+              productqty: $('#select'+ prodid + 'option:selected').text(),
+              csrfmiddlewaretoken: '{{csrf_token}}',
+              action: 'post',
+          },
+          success: function(json) {
+            
           },
           error: function(xhr, errmsg, err) {
               

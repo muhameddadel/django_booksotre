@@ -31,3 +31,12 @@ def basket_delete(request):
         basket.delete(product=str(product_id))
         response = JsonResponse({'Success': True})
         return response
+    
+
+def basket_update(request):
+    basket = Basket(request)
+    if request.POST.get('action') == 'post':
+        product_id = int(request.POST.get('productid'))
+        product_qty = int(request.POST.get('productqty'))
+        response = JsonResponse({'Sucess': True})
+        return response
