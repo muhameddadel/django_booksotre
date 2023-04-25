@@ -4,8 +4,9 @@
   {% if category %} {{category.name}} {% else %}Products{% endif %}
 {% endblock title %}
 {% block content %}
+
 <main>
-    <div class="album py-5 bg-light">
+    <div class="album py-5">
       <div class="container">
   
         <div class="pb-3 h5">{{category.name|title}}</div>
@@ -35,4 +36,6 @@
   
   
   </main>
+
+ 
 {% endblock content %}

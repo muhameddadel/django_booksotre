@@ -7,7 +7,7 @@ from .basket import Basket
 def basket_summary(request):
     basket = Basket(request)
     context = {'basket': basket}
-    return render(request, 'store/basket/summary.html', context)
+    return render(request, 'basket/summary.html', context)
 
 
 def basket_add(request):
@@ -36,7 +36,6 @@ def basket_delete(request):
         return response
     
 
-
 def basket_update(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
@@ -52,8 +51,9 @@ def basket_update(request):
         else:
             basket.update(product=product_id, qty=product_qty)
             basketqty = basket.__len__()
-            baskettotal = basket.get_total_price()
-            response = JsonResponse({'qty': basketqty, 'subtotal': baskettotal})
+            subtotal = basket.get_subtotal_price()
+            total = basket.get_total_price()
+            response = JsonResponse({'qty': basketqty, 'subtotal': subtotal, 'total': total})
             return response
     else:
         # handle the case where the request method is not POST or action is not 'post'

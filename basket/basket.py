@@ -49,19 +49,6 @@ class Basket():
         Get the basket data and count the the quntity of items
         """
         return sum(item['qty'] for item in self.basket.values())
-    
-    def get_total_price(self):
-        return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
-    
-    def delete(self, product):
-        """
-        Delete item from session data
-        """
-        product_id = str(product)
-
-        if product_id in self.basket:
-            del self.basket[product_id]
-            self.save()
 
     def update(self, product, qty):
         """
@@ -74,5 +61,30 @@ class Basket():
         
         self.save()
 
+    def get_subtotal_price(self):
+        return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+
+    def get_total_price(self):
+
+        subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+
+        if subtotal == 0:
+            shipping = Decimal(0.00)
+        else:
+            shipping = Decimal(11.50)
+
+            total = subtotal + Decimal(shipping)
+        return total
+    
+    def delete(self, product):
+        """
+        Delete item from session data
+        """
+        product_id = str(product)
+
+        if product_id in self.basket:
+            del self.basket[product_id]
+            self.save()
+            
     def save(self):
         self.session.modified = True
