@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from store.models import *
 
-
 class BasketAddTestCase(TestCase):
 
     def setUp(self):
@@ -25,3 +24,28 @@ class BasketAddTestCase(TestCase):
         """
         response = self.client.get(reverse('basket:basket-summary'))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'store/basket/summary.html')
+
+    def test_basket_add(self):
+        """
+        Test adding item to the basket
+        """
+        response = self.client.post(reverse('basket:basket-add'), {'productid':3, 'productqty': 1, 'action': 'post'}, xhr=True)
+        self.assertEqual(response.json(), {'qty': 4})
+        response = self.client.post(reverse('basket:basket-add'), {'productid':2, 'productqty': 1, 'action': 'post'}, xhr=True)
+        self.assertEqual(response.json(), {'qty': 3})
+
+    def test_basket_delete(self):
+        """
+        Test deleting items from the basket
+        """
+        response = self.client.post(reverse('basket:basket-delete'), {'productid': 2, 'action': 'post'}, xhr=True)
+        self.assertEqual(response.json(), {'qty': 1, 'subtotal': '20.00'})
+
+    def test_basket_update(self):
+        """
+        Test updating items from the basket
+        """
+        response = self.client.post(
+            reverse('basket:basket-update'), {"productid": 2, "productqty": 1, "action": "post"}, xhr=True)
+        self.assertEqual(response.json(), {'qty': 2, 'subtotal': '40.00'})
