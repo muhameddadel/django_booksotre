@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django import forms
 
 from .models import *
@@ -70,3 +70,17 @@ class UserEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].required = True
         self.fields['email'].required = True
+
+
+class PwdResetForm(PasswordResetForm):
+    email = forms.EmailField(max_length=255, widget=forms.TextInput(
+        attrs={'class':'form-control mb-3', 'placeholder':'Email', 'id':'form-email'}
+    ))
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        u = UserBase.objects.filter(email=email)
+        if not u:
+            raise forms.ValidationError('Unfortunatley we can not find that email')
+        return email
+    
