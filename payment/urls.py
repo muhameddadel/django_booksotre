@@ -6,5 +6,5 @@ app_name = 'payment'
 
 
 urlpatterns = [
-    
+    path('', BasketView, name='basket'),
 ]
