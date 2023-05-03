@@ -7,4 +7,6 @@ app_name = 'payment'
 
 urlpatterns = [
     path('', BasketView, name='basket'),
+    path('orderplaced/', order_placed, name='order_placed'),
+    path('webhook/', stripe_webhook, name='order_placed'),
 ]

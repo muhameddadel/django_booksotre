@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-*rh_gfcn%we^t_rwk$55tk4k3s7lfxpc+&3=dbc-2#^smd2g#l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-LLOWED_HOSTS = ['yourdomain.com', '127.0.0.1']
+LLOWED_HOSTS = ['yourdomain.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -131,3 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#stripe payment
+PUBLISHABLE_KEY = 'pk_test_51N3ElZHCEFgrfiGmyhfz8I2ETH45SiE0c5jsm5uGdg6QNmLx8AVOYiYs4LXVsQgZLJDp37H9z7JFl3Wr4dAVRueW002ZpJ6mud'
+SECRET_KEY = 'sk_test_51N3ElZHCEFgrfiGmEfrNWjSLGSnLzUKzuZW24hAFswSlAfuIW0DFnKT8i6zbHObHZALyyPGddwc8K8MQyWTwF3jk00JUBvFC1C'
+STRIPE_ENDPOINT_SECRET = 'whsec_581b22e4070e79daa4733f9ff64077aafa518b2146eb11a51f95f7f539cb7f5b'
