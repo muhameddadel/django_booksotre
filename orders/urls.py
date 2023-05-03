@@ -6,5 +6,5 @@ app_name = 'orders'
 
 
 urlpatterns = [
-    
+    path('add/', add, name='add'),
 ]
