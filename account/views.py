@@ -7,6 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+from orders.views import user_orders
 from .forms import *
 from .models import UserBase
 from .token import account_activation_token
@@ -14,7 +15,8 @@ from .token import account_activation_token
 
 @login_required
 def dashboard(request):
-    return render(request, 'account/user/dashboard.html')
+    orders = user_orders(request)
+    return render(request, 'account/user/dashboard.html', {'orders': orders})
 
 @login_required
 def edit_details(request):
