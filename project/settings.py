@@ -136,6 +136,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 BASKET_SESSION_ID = 'basket'
 
 #stripe payment
-# PUBLISHABLE_KEY = ''
-# SECRET_KEY = ''
-# STRIPE_ENDPOINT_SECRET = ''
+# os.environ.setdefault('STRIPE_PUBLISHABLE_KEY', '')
+# STRIPE_SECRET_KEY = ''
