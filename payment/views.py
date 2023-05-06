@@ -1,12 +1,12 @@
-import stripe
 import json
 import os
 
-from django.shortcuts import render
-from django.http.response import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+import stripe
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from basket.basket import Basket
 from orders.views import payment_confirmation
