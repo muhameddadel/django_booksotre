@@ -4,18 +4,14 @@ from .models import *
 
 
 def all_products(request):
-    products = Product.products.all()
-
+    products = Product.objects.all()
     context = {'products': products}
-
     return render(request, 'store/index.html',context )
 
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
-
     context = {'product': product}
-
     return render(request, 'store/detail.html', context)
 
 
