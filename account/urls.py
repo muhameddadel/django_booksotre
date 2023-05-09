@@ -53,7 +53,7 @@ urlpatterns = [
     ),
     path("addresses/", view_address, name="addresses"),
     path("add_address/", add_address, name="add_address"),
-    # path('addresses/edit/<slug:id>/', edit_address, name='edit_address'),
-    # path('addresses/delete/<slug:id>/', delete_address, name='delete_address'),
-    # path('addresses/set_default/<slug:id>/', set_defualt, name='set_defualt'),
+    path("addresses/edit/<slug:id>/", edit_address, name="edit_address"),
+    path("addresses/delete/<slug:id>/", delete_address, name="delete_address"),
+    path("addresses/set_default/<slug:id>/", set_default, name="set_defualt"),
 ]
