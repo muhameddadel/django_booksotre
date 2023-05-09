@@ -99,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # custom user model
-AUTH_USER_MODEL = 'account.UserBase'
+AUTH_USER_MODEL = 'account.Customer'
 LOGIN_REDIRECT_URL = '/account/dashboard'
 LOGIN_URL = '/account/login'
 
