@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.contrib import messages
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
@@ -27,12 +28,11 @@ def add_to_wishlist(request, id):
     product = get_object_or_404(Product, id=id)
     if product.users_wishlist.filter(id=request.user.id).exists():
         product.users_wishlist.remove(request.user)
+        messages.success(request, product.title + ' has been removed form your wishlist')
     else:
         product.users_wishlist.add(request.user)
+        messages.success(request, 'Added'+ product.title + 'to your wishlist')
     return HttpResponseRedirect(request.META["HTTP_REFERER"])
-
-
-
 
 
 @login_required
