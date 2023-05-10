@@ -43,6 +43,7 @@ urlpatterns = [
         TemplateView.as_view(template_name="account/password_reset/reset_status.html"),
         name="password_reset_complete",
     ),
+    # dashboard
     path("dashboard/", dashboard, name="dashboard"),
     path("profile/edit/", edit_details, name="edit_details"),
     path("profile/delete_user/", delete_user, name="delete_user"),
@@ -51,9 +52,12 @@ urlpatterns = [
         TemplateView.as_view(template_name="account/dashboard/delete_confirm.html"),
         name="delete_confirmation",
     ),
+    # addresses
     path("addresses/", view_address, name="addresses"),
     path("add_address/", add_address, name="add_address"),
     path("addresses/edit/<slug:id>/", edit_address, name="edit_address"),
     path("addresses/delete/<slug:id>/", delete_address, name="delete_address"),
     path("addresses/set_default/<slug:id>/", set_default, name="set_defualt"),
+    # wishlist
+    path("wishlist/add_to_wishlist/<int:id>/", add_to_wishlist, name="add_to_wishlist"),
 ]
