@@ -17,13 +17,19 @@ from .token import account_activation_token
 
 
 @login_required
+def wishlist(request):
+    products = Product.objects.filter(users_wishlist=request.user)
+    return render(request, 'account/dashboard/user_wish_list.html', {"wishlist": products})
+
+
+@login_required
 def add_to_wishlist(request, id):
     product = get_object_or_404(Product, id=id)
     if product.users_wishlist.filter(id=request.user.id).exists():
         product.users_wishlist.remove(request.user)
     else:
         product.users_wishlist.add(request.user)
-    return HttpResponseRedirect(request.META('HTTP_REFERER'))
+    return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
 
