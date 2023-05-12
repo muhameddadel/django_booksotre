@@ -5,4 +5,5 @@ from .views import *
 app_name = 'checkout'
 
 urlpatterns = [
+    path("deliverychoices", deliverychoices, name="deliverychoices"),
 ]
