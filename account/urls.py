@@ -58,6 +58,7 @@ urlpatterns = [
     path("addresses/edit/<slug:id>/", edit_address, name="edit_address"),
     path("addresses/delete/<slug:id>/", delete_address, name="delete_address"),
     path("addresses/set_default/<slug:id>/", set_default, name="set_defualt"),
+    path("user_orders/", user_orders, name="user_orders"),
     # wishlist
     path("wishlist/", wishlist, name="wishlist"),
     path("wishlist/add_to_wishlist/<int:id>/", add_to_wishlist, name="add_to_wishlist"),

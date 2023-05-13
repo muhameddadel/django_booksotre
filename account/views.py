@@ -12,6 +12,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from orders.views import user_orders
 
 from store.models import Product
+from orders.models import Order
 from .forms import *
 from .models import *
 from .token import account_activation_token
@@ -159,3 +160,8 @@ def set_default(request, id):
     return redirect("account:addresses")
 
 
+@login_required
+def set_default(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    return render(request, "account/dashboard/user_orders.html", {"orders": orders})
