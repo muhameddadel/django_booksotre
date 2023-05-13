@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from basket.basket import Basket
+from account.models import *
 
 from .models import *
 
@@ -10,6 +12,7 @@ from .models import *
 def deliverychoices(request):
     deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
     return render(request, 'checkout/delivery_choices.html', {'deliveryoptions': deliveryoptions})
+
 
 @login_required
 def basket_update_delivery(request):
@@ -30,3 +33,20 @@ def basket_update_delivery(request):
 
         response = JsonResponse({"total": updated_total_price, "delivery_price": delivery_type.delivery_price})
         return response
+
+
+@login_required
+def delivery_address(request):
+    session = request.session
+    if 'purchase' not in request.session:
+        messages.success(request, "Please select delivery option")
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    addresses = Address.objects.filter(customer=request.user).order_by('-default')
+    if 'address' not in request.session:
+        session['address'] = {'address_id': str(addresses[0].id)}
+    else:
+        session['address']['address_id'] = str(addresses[0].id)
+        session.modified = True
+        
+    return render(request, 'checkout/delivery_address.html', {'addresses': addresses})
