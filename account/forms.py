@@ -1,5 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    PasswordResetForm,
+    SetPasswordForm,
+)
 
 from .models import *
 
@@ -7,7 +11,14 @@ from .models import *
 class UserAddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ["full_name", "phone", "address_line", "address_line2", "town_city", "postcode"]
+        fields = [
+            "full_name",
+            "phone",
+            "address_line",
+            "address_line2",
+            "town_city",
+            "postcode",
+        ]
 
         def __init__(self, *args, **kwargs) -> None:
             super.__init__(*args, **kwargs)
@@ -33,17 +44,33 @@ class UserAddressForm(forms.ModelForm):
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={"class": "form-control mb-3", "placeholder": "Username", "id": "login-username"})
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control mb-3",
+                "placeholder": "Username",
+                "id": "login-username",
+            }
+        )
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password", "id": "login-pwd"})
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Password",
+                "id": "login-pwd",
+            }
+        )
     )
 
 
 class RegistrationFrom(forms.ModelForm):
-    user_name = forms.CharField(label="Enter Username", min_length=4, max_length=50, help_text="Required")
+    user_name = forms.CharField(
+        label="Enter Username", min_length=4, max_length=50, help_text="Required"
+    )
     email = forms.EmailField(
-        max_length=100, help_text="Required", error_messages={"required": "You will need an email"}
+        max_length=100,
+        help_text="Required",
+        error_messages={"required": "You will need an email"},
     )
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Repeat password", widget=forms.PasswordInput)
@@ -71,17 +98,30 @@ class RegistrationFrom(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data["email"]
         if Customer.objects.filter(email=email).exists():
-            raise forms.ValidationError("Please user another email, this email already exists")
+            raise forms.ValidationError(
+                "Please user another email, this email already exists"
+            )
         return email
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["user_name"].widget.attrs.update({"class": "form-control mb-3", "placeholder": "Username"})
-        self.fields["email"].widget.attrs.update(
-            {"class": "form-control mb-3", "placeholder": "E-mail", "name": "email", "id": "id_email"}
+        self.fields["user_name"].widget.attrs.update(
+            {"class": "form-control mb-3", "placeholder": "Username"}
         )
-        self.fields["password"].widget.attrs.update({"class": "form-control mb-3", "placeholder": "Password"})
-        self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Repeat Password"})
+        self.fields["email"].widget.attrs.update(
+            {
+                "class": "form-control mb-3",
+                "placeholder": "E-mail",
+                "name": "email",
+                "id": "id_email",
+            }
+        )
+        self.fields["password"].widget.attrs.update(
+            {"class": "form-control mb-3", "placeholder": "Password"}
+        )
+        self.fields["password2"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Repeat Password"}
+        )
 
 
 class UserEditForm(forms.ModelForm):
@@ -89,7 +129,12 @@ class UserEditForm(forms.ModelForm):
         label="Account email (can not be changed)",
         max_length=200,
         widget=forms.TextInput(
-            attrs={"class": "form-control mb-3", "placeholder": "email", "id": "form-email", "readonly": "readonly"}
+            attrs={
+                "class": "form-control mb-3",
+                "placeholder": "email",
+                "id": "form-email",
+                "readonly": "readonly",
+            }
         ),
     )
 
@@ -102,7 +147,11 @@ class UserEditForm(forms.ModelForm):
         min_length=4,
         max_length=50,
         widget=forms.TextInput(
-            attrs={"class": "form-control mb-3", "placeholder": "Firstname", "id": "form-firstname"}
+            attrs={
+                "class": "form-control mb-3",
+                "placeholder": "Firstname",
+                "id": "form-firstname",
+            }
         ),
     )
 
@@ -122,7 +171,13 @@ class UserEditForm(forms.ModelForm):
 class PwdResetForm(PasswordResetForm):
     email = forms.EmailField(
         max_length=255,
-        widget=forms.TextInput(attrs={"class": "form-control mb-3", "placeholder": "Email", "id": "form-email"}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control mb-3",
+                "placeholder": "Email",
+                "id": "form-email",
+            }
+        ),
     )
 
     def clean_email(self):
@@ -137,12 +192,20 @@ class PwdResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(
         label="New Password",
         widget=forms.PasswordInput(
-            attrs={"class": "form-control mb-3", "placeholder": "New Password", "id": "form-newpass"}
+            attrs={
+                "class": "form-control mb-3",
+                "placeholder": "New Password",
+                "id": "form-newpass",
+            }
         ),
     )
     new_password2 = forms.CharField(
         label="Repeat password",
         widget=forms.PasswordInput(
-            attrs={"class": "form-control mb-3", "placeholder": "New Password", "id": "form-new-pass2"}
+            attrs={
+                "class": "form-control mb-3",
+                "placeholder": "New Password",
+                "id": "form-new-pass2",
+            }
         ),
     )

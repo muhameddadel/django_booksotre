@@ -1,22 +1,25 @@
 import json
 
-from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
-from basket.basket import Basket
+from django.shortcuts import render
+from paypalcheckoutsdk.orders import OrdersGetRequest
+
 from account.models import *
+from basket.basket import Basket
 from orders.models import *
 
 from .models import *
-
-from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
+
 
 @login_required
 def deliverychoices(request):
     deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
-    return render(request, 'checkout/delivery_choices.html', {'deliveryoptions': deliveryoptions})
+    return render(
+        request, "checkout/delivery_choices.html", {"deliveryoptions": deliveryoptions}
+    )
 
 
 @login_required
@@ -25,7 +28,9 @@ def basket_update_delivery(request):
     if request.POST.get("action") == "post":
         delivery_option = int(request.POST.get("deliveryoption"))
         delivery_type = DeliveryOptions.objects.get(id=delivery_option)
-        updated_total_price = basket.basket_update_delivery(delivery_type.delivery_price)
+        updated_total_price = basket.basket_update_delivery(
+            delivery_type.delivery_price
+        )
 
         session = request.session
         if "purchase" not in request.session:
@@ -36,41 +41,46 @@ def basket_update_delivery(request):
             session["purchase"]["delivery_id"] = delivery_type.id
             session.modified = True
 
-        response = JsonResponse({"total": updated_total_price, "delivery_price": delivery_type.delivery_price})
+        response = JsonResponse(
+            {
+                "total": updated_total_price,
+                "delivery_price": delivery_type.delivery_price,
+            }
+        )
         return response
 
 
 @login_required
 def delivery_address(request):
     session = request.session
-    if 'purchase' not in request.session:
+    if "purchase" not in request.session:
         messages.success(request, "Please select delivery option")
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
-    addresses = Address.objects.filter(customer=request.user).order_by('-default')
-    if 'address' not in request.session:
-        session['address'] = {'address_id': str(addresses[0].id)}
+    addresses = Address.objects.filter(customer=request.user).order_by("-default")
+    if "address" not in request.session:
+        session["address"] = {"address_id": str(addresses[0].id)}
     else:
-        session['address']['address_id'] = str(addresses[0].id)
+        session["address"]["address_id"] = str(addresses[0].id)
         session.modified = True
-        
-    return render(request, 'checkout/delivery_address.html', {'addresses': addresses})
+
+    return render(request, "checkout/delivery_address.html", {"addresses": addresses})
 
 
 @login_required
 def payment_selection(request):
-    if 'address' not in request.session:
-        messages.success(request, 'Please select address option')
-        return HttpResponseRedirect(request.META('HTTP_REFERER'))
+    if "address" not in request.session:
+        messages.success(request, "Please select address option")
+        return HttpResponseRedirect(request.META("HTTP_REFERER"))
 
-    return render(request, 'checkout/payment_selection.html')
+    return render(request, "checkout/payment_selection.html")
 
 
 @login_required
 def payment_complete(request):
     PPClient = PayPalClient()
     body = json.loads(request.body)
-    data = body['orderID']
+    data = body["orderID"]
     user_id = request.user.id
 
     requestorder = OrdersGetRequest(data)
@@ -95,13 +105,18 @@ def payment_complete(request):
     order_id = order.pk
 
     for item in basket:
-        OrderItem.objects.create(order_id=order_id, product=item['protuct'], price=item["price"], quantity=item["qty"])
-    
-    return JsonResponse('Payment completed!', safe=False)
+        OrderItem.objects.create(
+            order_id=order_id,
+            product=item["protuct"],
+            price=item["price"],
+            quantity=item["qty"],
+        )
+
+    return JsonResponse("Payment completed!", safe=False)
 
 
 @login_required
 def payment_successful(request):
     basket = Basket(request)
     basket.clear()
-    return render(request, 'checkout/payment_successful.html')
+    return render(request, "checkout/payment_successful.html")

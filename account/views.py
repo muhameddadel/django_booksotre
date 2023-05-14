@@ -1,18 +1,18 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.contrib import messages
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
-from orders.views import user_orders
-
-from store.models import Product
 from orders.models import Order
+from orders.views import user_orders
+from store.models import Product
+
 from .forms import *
 from .models import *
 from .token import account_activation_token
@@ -21,7 +21,9 @@ from .token import account_activation_token
 @login_required
 def wishlist(request):
     products = Product.objects.filter(users_wishlist=request.user)
-    return render(request, 'account/dashboard/user_wish_list.html', {"wishlist": products})
+    return render(
+        request, "account/dashboard/user_wish_list.html", {"wishlist": products}
+    )
 
 
 @login_required
@@ -29,10 +31,12 @@ def add_to_wishlist(request, id):
     product = get_object_or_404(Product, id=id)
     if product.users_wishlist.filter(id=request.user.id).exists():
         product.users_wishlist.remove(request.user)
-        messages.success(request, product.title + ' has been removed form your wishlist')
+        messages.success(
+            request, product.title + " has been removed form your wishlist"
+        )
     else:
         product.users_wishlist.add(request.user)
-        messages.success(request, 'Added'+ product.title + 'to your wishlist')
+        messages.success(request, "Added" + product.title + "to your wishlist")
     return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
@@ -52,7 +56,9 @@ def edit_details(request):
     else:
         user_form = UserEditForm(instance=request.user)
 
-    return render(request, "account/dashboard/edit_details.html", {"user_form": user_form})
+    return render(
+        request, "account/dashboard/edit_details.html", {"user_form": user_form}
+    )
 
 
 @login_required
@@ -86,7 +92,11 @@ def account_register(request):
                 },
             )
             user.email_user(subject=subject, message=message)
-            return render(request, "account/registration/register_email_confirm.html", {"form": registerForm})
+            return render(
+                request,
+                "account/registration/register_email_confirm.html",
+                {"form": registerForm},
+            )
     else:
         registerForm = RegistrationFrom()
     return render(request, "account/registration/register.html", {"form": registerForm})
@@ -125,7 +135,9 @@ def add_address(request):
             return HttpResponseRedirect(reverse("account:addresses"))
         else:
             address_form = UserAddressForm()
-    return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+    return render(
+        request, "account/dashboard/edit_addresses.html", {"form": address_form}
+    )
 
 
 @login_required
@@ -139,7 +151,9 @@ def edit_address(request, id):
     else:
         address = Address.objects.get(pk=id, customer=request.user)
         address_form = UserAddressForm(instance=address)
-    return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+    return render(
+        request, "account/dashboard/edit_addresses.html", {"form": address_form}
+    )
 
 
 @login_required
@@ -152,10 +166,10 @@ def delete_address(request, id):
 def set_default(request, id):
     Address.objects.filter(customer=request.user, default=True).update(default=False)
     Address.objects.filter(pk=id, customer=request.user).update(default=True)
-    
-    previous_url = request.META.get('HTTP_REFERER')
-    if 'delivery_address' in previous_url:
-        return redirect('checkout:delivery_address')
+
+    previous_url = request.META.get("HTTP_REFERER")
+    if "delivery_address" in previous_url:
+        return redirect("checkout:delivery_address")
 
     return redirect("account:addresses")
 
